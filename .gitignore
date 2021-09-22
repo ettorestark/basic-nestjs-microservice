@@ -1,0 +1,8 @@
+mysql-container
+mongodb-container
+admin-service/node_modules
+admin-service/.env
+admin-service/src
+main-service/node_modules
+main-service/.env
+main-service/src

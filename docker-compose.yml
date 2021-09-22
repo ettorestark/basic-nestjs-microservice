@@ -1,0 +1,46 @@
+version: "3.0"
+
+services:
+  main_service:
+    container_name: main_service
+    build: ./main-service/
+    ports: 
+      - 3001:30001
+    depends_on: 
+      - "mongodb"
+    network_mode: host
+      
+  mysql_database: 
+    container_name: mysql_database 
+    image: mysql:5.7
+    ports: 
+      - "3310:3306"
+    volumes: 
+      - ./mysql-container:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: nest_admin
+
+  admin_service:
+      depends_on:
+        - mysql_database 
+      container_name: admin_service
+      build: ./admin-service/
+      ports: 
+        - 3000:3000
+      depends_on:
+        - "mysql_database"
+      restart: always
+      network_mode: host
+    
+  mongodb:
+    container_name: mongodb
+    image: mongo:4.2.3
+    environment: 
+      - PUID=1000
+      - PGID=1000
+    volumes: 
+      - ./mongodb-container:/data/db
+    ports:
+      - 27017:27017
+    restart: always
